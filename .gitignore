@@ -23,14 +23,19 @@ __pycache__/ # For Python projects
 *.pyc # For Python projects
 *.class # For Java projects
 
+# Logs
+**/Logs/
+Logs
+logs
+
 # Sensitive information (if applicable, be cautious)
 *.env
 .env.local
 .pdf
 *.exe
 
+# VM's 
 ub11Exer/
-**/Logs/
 *.vbox*
 *.vdi
 *.vmdk

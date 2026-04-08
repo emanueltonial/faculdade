@@ -1,0 +1,118 @@
+name: Lint Web
+
+on:
+  push:
+    branches:
+      - main
+      - "branch/**"
+    paths:
+      - "**/*.html"
+      - "**/*.css"
+      - "**/*.js"
+  pull_request:
+    paths:
+      - "**/*.html"
+      - "**/*.css"
+      - "**/*.js"
+
+concurrency:
+  group: lint-web-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint-web:
+    name: Valida arquivos Web
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Instala ferramentas de lint
+        run: |
+          npm install -g htmlhint stylelint stylelint-config-standard
+
+      - name: Lint HTML
+        id: lint-html
+        run: |
+          mkdir -p logs
+
+          html_files=$(find . -type f -name "*.html" -not -path "./.git/*")
+
+          if [ -z "$html_files" ]; then
+            echo "Nenhum arquivo HTML encontrado."
+            exit 0
+          fi
+
+          failed=0
+
+          while IFS= read -r file; do
+            echo "Validando HTML: $file"
+            if ! htmlhint "$file" >> logs/lint-web.log 2>&1; then
+              failed=$((failed + 1))
+            fi
+          done <<< "$html_files"
+
+          echo "html_failed=$failed" >> "$GITHUB_OUTPUT"
+
+          if [ "$failed" -gt 0 ]; then
+            echo "$failed arquivo(s) HTML com problemas."
+          else
+            echo "Todos os arquivos HTML validados."
+          fi
+
+      - name: Lint CSS
+        id: lint-css
+        run: |
+          css_files=$(find . -type f -name "*.css" -not -path "./.git/*")
+
+          if [ -z "$css_files" ]; then
+            echo "Nenhum arquivo CSS encontrado."
+            exit 0
+          fi
+
+          echo '{ "extends": ["stylelint-config-standard"] }' > .stylelintrc.json
+
+          failed=0
+
+          while IFS= read -r file; do
+            echo "Validando CSS: $file"
+            if ! stylelint "$file" >> logs/lint-web.log 2>&1; then
+              failed=$((failed + 1))
+            fi
+          done <<< "$css_files"
+
+          echo "css_failed=$failed" >> "$GITHUB_OUTPUT"
+
+          if [ "$failed" -gt 0 ]; then
+            echo "$failed arquivo(s) CSS com avisos."
+          else
+            echo "Todos os arquivos CSS validados."
+          fi
+
+      - name: Gera resumo no log
+        if: always()
+        run: |
+          echo "" >> logs/lint-web.log
+          echo "==============================" >> logs/lint-web.log
+          echo "RESUMO LINT WEB" >> logs/lint-web.log
+          echo "Data: $(date -u '+%Y-%m-%d %H:%M UTC')" >> logs/lint-web.log
+          echo "Branch: ${{ github.ref_name }}" >> logs/lint-web.log
+          echo "Commit: ${{ github.sha }}" >> logs/lint-web.log
+          echo "Autor: ${{ github.actor }}" >> logs/lint-web.log
+          echo "HTML com falhas: ${{ steps.lint-html.outputs.html_failed }}" >> logs/lint-web.log
+          echo "CSS com falhas: ${{ steps.lint-css.outputs.css_failed }}" >> logs/lint-web.log
+          echo "==============================" >> logs/lint-web.log
+
+      - name: Upload do log de lint
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: log-lint-web-${{ github.sha }}
+          path: logs/lint-web.log
+          retention-days: 7

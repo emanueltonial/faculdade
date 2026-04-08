@@ -1,0 +1,105 @@
+name: Quality Gate
+
+on:
+  push:
+    branches:
+      - main
+      - "branch/**"
+  pull_request:
+    branches:
+      - main
+      - "branch/**"
+
+concurrency:
+  group: quality-gate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality-gate:
+    name: Quality Gate
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verifica arquivos proibidos de VM
+        id: check-vm
+        run: |
+          forbidden=$(find . -type f \( \
+            -name "*.vdi" -o \
+            -name "*.vbox" -o \
+            -name "*.vmdk" -o \
+            -name "*.ova" \
+          \) -not -path "./.git/*")
+
+          if [ -n "$forbidden" ]; then
+            echo "Arquivos de VM encontrados:"
+            echo "$forbidden"
+            echo "vm_found=true" >> "$GITHUB_OUTPUT"
+            exit 1
+          fi
+
+          echo "Nenhum arquivo de VM encontrado."
+          echo "vm_found=false" >> "$GITHUB_OUTPUT"
+
+      - name: Verifica arquivos maiores que 50MB
+        id: check-size
+        run: |
+          large=$(find . -type f -size +50M \
+            -not -path "./.git/*" \
+            -not -path "./.github/*")
+
+          if [ -n "$large" ]; then
+            echo "Arquivos grandes encontrados:"
+            echo "$large"
+            echo "large_found=true" >> "$GITHUB_OUTPUT"
+            exit 1
+          fi
+
+          echo "Nenhum arquivo maior que 50MB."
+          echo "large_found=false" >> "$GITHUB_OUTPUT"
+
+      - name: Alerta sobre .class versionados
+        id: check-class
+        run: |
+          class_files=$(find . -type f -name "*.class" \
+            -not -path "./.git/*")
+
+          if [ -n "$class_files" ]; then
+            echo "Arquivos .class encontrados (deveriam estar no .gitignore):"
+            echo "$class_files"
+            echo "class_found=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Nenhum .class versionado."
+            echo "class_found=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Gera log de falha
+        if: failure()
+        run: |
+          mkdir -p logs
+
+          echo "==============================" >> logs/quality-gate.log
+          echo "FALHA NO QUALITY GATE" >> logs/quality-gate.log
+          echo "Data: $(date -u '+%Y-%m-%d %H:%M UTC')" >> logs/quality-gate.log
+          echo "Branch: ${{ github.ref_name }}" >> logs/quality-gate.log
+          echo "Commit: ${{ github.sha }}" >> logs/quality-gate.log
+          echo "Autor: ${{ github.actor }}" >> logs/quality-gate.log
+          echo "==============================" >> logs/quality-gate.log
+
+          echo "VM encontrada: ${{ steps.check-vm.outputs.vm_found }}" >> logs/quality-gate.log
+          echo "Arquivo grande: ${{ steps.check-size.outputs.large_found }}" >> logs/quality-gate.log
+          echo "Class versionado: ${{ steps.check-class.outputs.class_found }}" >> logs/quality-gate.log
+
+          cat logs/quality-gate.log
+
+      - name: Upload do log de falha
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: log-quality-gate-${{ github.sha }}
+          path: logs/quality-gate.log
+          retention-days: 7
