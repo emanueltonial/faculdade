@@ -1,0 +1,37 @@
+begin
+    update dept
+    set loc = 'DALLAS'
+    where dname = "IT"
+    
+    commit;
+
+    dbms_output.put_line('Foram atualizadas' || to_char(SQL%ROWCOUNT) || 'linhas');
+end;
+/
+
+-- #############################################
+declare
+    v_deptno dept.deptno%type;
+
+begin
+    select deptno 
+    into v_deptno
+    set v_deptno
+    where dname = 'RESEARCH'
+    
+    v_deptno := v_deptno + 1;
+
+    insert into dept
+    values (v_deptno, 'PROJETO', 'ERECHIM')
+
+    dbms_output.put_line('Novo dept inserido': ||to_Char(v_deptno));
+end;
+/
+-- Usando SEQ_DEPT.NEXTVAL        
+    insert into dept (deptno, dname, loc)
+    values (SEQ_DEPT.NEXTVAL, 'PENOIS', 'GETULIO VARGAS')
+
+    commit;
+
+end;
+/

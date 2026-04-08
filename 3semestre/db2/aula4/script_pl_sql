@@ -1,0 +1,79 @@
+/*set serverout on*/
+create or replace procedure p_menor_sal_cidade (p_city dept.loc%type) as
+     /* Vars que guardo o valor do meus selects */
+    v_deptno dept.deptno%type;
+    v_min_sal emp.sal%type;
+    v_emp_name emp.ename%type;
+    v_sal emp.sal%type;
+begin 
+    /* Selecionar departamento de uma determinada cidade */
+    select deptno 
+    into v_deptno
+    from dept
+    where loc = p_city;
+
+    /* O menor salário */
+    select min(sal)
+    into v_min_sal
+    from emp
+    where 
+    emp.deptno = v_deptno;
+
+    /* Selecionar o funcionario com o menor salário */
+    select ename, sal
+    into v_emp_name, v_sal
+    from emp 
+    where 
+    sal = v_min_sal;
+
+        dbms_output.put_line('Nome:'||v_emp_name||'Salário: '||v_sal);
+
+end;
+/
+
+/*#####################################*/
+
+create or replace function f_media_sal_mgr(v_mgr emp.mgr%type) return number
+    as 
+    v_media emp.sal%type;
+begin
+
+    select avg(sal)
+    into v_media
+    from emp
+    where mgr = v_mgr;
+
+    return v_media;
+end;
+/
+
+/*#####################################*/
+
+create table ATUALIZACOES_SALARIOS
+(
+empno number(4),
+ename varchar2(10),
+sal_antes number(7,2),
+sal_depois number(7,2),
+data_alteracao date
+);
+
+/* 
+trigger que é ativada caso tenha alteração no valor do salário de algum employee 
+é uma tabela histórico que guarda o nome, antigo salário, salário novo e data de alteração.
+*/
+CREATE OR REPLACE TRIGGER t_registra_salario
+BEFORE UPDATE OF sal ON emp
+FOR EACH ROW
+BEGIN
+IF :OLD.sal != :NEW.sal THEN
+INSERT INTO ATUALIZACOES_SALARIOS (empno, ename, sal_antes, sal_depois, data_alteracao)
+VALUES (:OLD.empno, :OLD.ename, :OLD.sal, :NEW.sal, SYSDATE);
+END IF;
+END;
+/
+
+update emp set sal=10000 where job='CLERK';
+commit;
+select * from atualizacoes_salarios;
+select * from emp;

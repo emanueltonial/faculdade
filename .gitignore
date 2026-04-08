@@ -28,3 +28,9 @@ __pycache__/ # For Python projects
 .env.local
 .pdf
 *.exe
+
+ub11Exer/
+**/Logs/
+*.vbox*
+*.vdi
+*.vmdk
