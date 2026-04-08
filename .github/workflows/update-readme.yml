@@ -14,16 +14,17 @@ on:
       - "**/*.sql"
       - "**/*.php"
       - "**/*.md"
+      - ".github/workflows/update-readme.yml"
 
 concurrency:
-  group: update-readme-${{ github.ref }}
+  group: "update-readme-${{ github.ref }}"
   cancel-in-progress: true
 
 jobs:
   update-readme:
     name: Atualiza README automaticamente
     runs-on: ubuntu-latest
-    if: github.actor != 'github-actions[bot]'
+    if: ${{ github.actor != 'github-actions[bot]' }}
 
     permissions:
       contents: write
@@ -36,12 +37,13 @@ jobs:
 
       - name: Conta arquivos por tipo
         id: contagem
+        shell: bash
         run: |
           count_files() {
             find . -type f -name "$1" \
               -not -path "./.git/*" \
               -not -path "./.github/*" \
-              | wc -l
+              | wc -l | tr -d ' '
           }
 
           echo "java=$(count_files '*.java')" >> "$GITHUB_OUTPUT"
@@ -54,41 +56,51 @@ jobs:
           echo "md=$(count_files '*.md')" >> "$GITHUB_OUTPUT"
 
       - name: Atualiza README
+        shell: bash
+        env:
+          JAVA_COUNT: ${{ steps.contagem.outputs.java }}
+          CPP_COUNT: ${{ steps.contagem.outputs.cpp }}
+          HTML_COUNT: ${{ steps.contagem.outputs.html }}
+          CSS_COUNT: ${{ steps.contagem.outputs.css }}
+          JS_COUNT: ${{ steps.contagem.outputs.js }}
+          SQL_COUNT: ${{ steps.contagem.outputs.sql }}
+          PHP_COUNT: ${{ steps.contagem.outputs.php }}
+          MD_COUNT: ${{ steps.contagem.outputs.md }}
+          BRANCH_NAME: ${{ github.ref_name }}
+          COMMIT_SHA: ${{ github.sha }}
         run: |
-          cat > README.md << 'EOF'
+          UPDATED_AT="$(date -u '+%Y-%m-%d %H:%M UTC')"
+
+          cat > README.md <<EOF
           ![Banner](images/ifrs.png)
 
           # Análise e Desenvolvimento de Sistemas - IFRS Erechim
 
-          Olá!
+          Olá!  
           Este repositório reúne os conteúdos, projetos e exercícios que desenvolvo ao longo do curso de **Análise e Desenvolvimento de Sistemas (ADS)** no **Instituto Federal do Rio Grande do Sul (IFRS), campus Erechim**.
 
           Aqui você encontrará materiais que ajudam no meu aprendizado e crescimento na área de tecnologia e programação.
 
           ---
 
-          **Autor:** Emanuel D'Agostini Tonial
-          **Curso:** Análise e Desenvolvimento de Sistemas (ADS)
-          **Instituição:** IFRS - Campus Erechim
+          **Autor:** Emanuel D'Agostini Tonial  
+          **Curso:** Análise e Desenvolvimento de Sistemas (ADS)  
+          **Instituição:** IFRS - Campus Erechim  
 
           ---
 
           ## 📊 Progresso por Linguagem
-          EOF
 
-          # Concatena a tabela dinâmica separadamente
-          # para evitar conflito entre ${{ }} do Actions e $() do Shell
-          cat >> README.md << EOF
-          | Linguagem      | Arquivos |
-          |----------------|----------|
-          | ☕ Java        | ${{ steps.contagem.outputs.java }} |
-          | ⚙️ C++         | ${{ steps.contagem.outputs.cpp }} |
-          | 🌐 HTML        | ${{ steps.contagem.outputs.html }} |
-          | 🎨 CSS         | ${{ steps.contagem.outputs.css }} |
-          | 🟨 JavaScript  | ${{ steps.contagem.outputs.js }} |
-          | 🗄️ SQL         | ${{ steps.contagem.outputs.sql }} |
-          | 🐘 PHP         | ${{ steps.contagem.outputs.php }} |
-          | 📝 Markdown    | ${{ steps.contagem.outputs.md }} |
+          | Linguagem | Arquivos |
+          |---|---:|
+          | ☕ Java | $JAVA_COUNT |
+          | ⚙️ C++ | $CPP_COUNT |
+          | 🌐 HTML | $HTML_COUNT |
+          | 🎨 CSS | $CSS_COUNT |
+          | 🟨 JavaScript | $JS_COUNT |
+          | 🗄️ SQL | $SQL_COUNT |
+          | 🐘 PHP | $PHP_COUNT |
+          | 📝 Markdown | $MD_COUNT |
 
           ---
 
@@ -98,13 +110,14 @@ jobs:
           |---|---|
           | 🛡️ quality-gate | Bloqueia VMs e arquivos grandes |
           | ☕ build-java | Compila Java por pasta/pacote |
-          | 🌐 lint-web | Valida sintaxe HTML e CSS |
+          | 🌐 lint-web | Valida HTML, CSS e JS |
           | 📝 update-readme | Atualiza este README automaticamente |
 
           ---
 
-          > 🤖 Atualizado automaticamente em: $(date -u '+%Y-%m-%d %H:%M UTC')
-          > 📌 Branch: ${{ github.ref_name }} | Commit: \`${{ github.sha }}\`
+          > 🤖 Atualizado automaticamente em: $UPDATED_AT  
+          > 📌 Branch: \`$BRANCH_NAME\`  
+          > 🔖 Commit: \`$COMMIT_SHA\`
 
           ---
 
@@ -112,6 +125,7 @@ jobs:
           EOF
 
       - name: Commit e push do README
+        shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
