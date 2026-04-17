@@ -36,7 +36,7 @@ __pycache__/ # For Python projects
 *.exe
 
 # VM's 
-ub11Exer/
+Ub11Exer/
 *.vbox*
 *.vdi
 *.vmdk
