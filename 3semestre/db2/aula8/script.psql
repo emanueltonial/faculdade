@@ -1,0 +1,136 @@
+/*usuarios usados: pos/pos - eor/eor  */
+
+/* Exemplo de View */
+
+col rs format a30
+
+create or replace view VCLI as
+select 	cli. cod_cliente CODCLI, 
+	cli.razao_social RS, 
+	cli.data_cadastro DTCAD, 
+	cid.descricao CIDADE, 
+	cid.uf UF
+from cliente cli, cidade cid
+where cli.cod_cidade = cid.cod_cidade
+order by cli.razao_social;
+
+select * from vcli;
+
+select * from vcli 
+where CODCLI = 3499;
+
+/* 
+
+1) Criar uma view chamada VCLITEL que selecione somente 
+os campos COD_CLIENTE, RAZAO_SOCIAL e TELEFONE da tabela CLIENTE.
+*/
+
+create or replace view VCLITEL as
+select cli.cod_cliente, cli.razao_social, cli.telefone 
+from cliente cli
+
+/* 
+2) Criar uma view chamada VPRODINAT que seleciona todos os códigos de produtos
+com suas descrições e suas quantidades para todos os produtos que estejam inativos
+*/
+
+create or replace view VPRODINAT as
+select prod.cod_produto, prod.descricao, est.qtde
+from produto prod, estoque est
+where est.cod_produto (+) = prod.cod_produto and
+prod.ativo = 'N';
+
+
+/*
+3) Criar uma view chamada VFAT_AL_BIM1_2004 que selecione a data da venda, o código do cliente, 
+a razão social dele, o código do produto, a descrição do produto e a quantidade vendida  de todas 
+as vendas realizadas por clientes de AL no primeiro bimestre de 2004 ordenando por data de venda de forma descendente; 
+*/
+
+create or replace view VFAT_AL_BIM1_2004 as
+select v.data_venda, c.cod_cliente, c.razao_social, p.cod_produto, p.descricao, v.qtde
+from produto p, venda v, cliente c, cidade ci
+where c.cod_cliente = v.cod_cliente and
+    p.cod_produto = v.cod_produto and
+    ci.uf = 'al'
+    v.data_venda between '01-jan-04' and '29-fev-04'
+order by v.data_venda desc;
+
+/*
+4) Criar uma view chamada VFAT_NE_JAN2024 que mostre os mesmos dados da view anterior, 
+porém somente para clientes de AL, PE, CE e RN e que tenham comprado produtos que 
+estejam atualmente com estoque entre 0 e 5 unidades e cuja compra foi realizada 
+em janeiro de 2024, em ordem descendente de data, e dentro do dia em ordem ascendente de razão social.
+*/
+
+create or replace view VFAT_NE_JAN2024 as
+select 
+    v.data_venda, 
+    c.cod_cliente,
+    c.razao_social,
+    p.cod_produto,
+    p.descricao,
+    v.qtde
+from produto p,
+    venda v, 
+    cliente c, 
+    cidade ci, 
+    estoque e 
+where c.cod_cliente = v.cod_cliente 
+    and p.cod_produto = v.cod_produto
+    and e.cod_produto = p.cod_produto
+    and ci.uf in ('CE', 'PE', 'AL', 'RN') 
+    and v.qtde between 0 and 5 
+    and v.data_venda between '01-jan-2024' and '31-jan-2024'
+order by v.data_venda desc, c.razao_social asc;
+
+/*
+5) Alterar a view anterior para incluir somente produtos cujas vendas foram
+maiores de 5 unidades mostrando a quantidade atual de estoque também no select.
+*/
+
+create or replace view VFAT_NE_JAN2024 as
+select 
+    v.data_venda, 
+    c.cod_cliente,
+    c.razao_social,
+    p.cod_produto,
+    p.descricao,
+    v.qtde vqtde,
+    e.qtde eqtde
+from produto p,
+    venda v, 
+    cliente c, 
+    cidade ci, 
+    estoque e 
+where c.cod_cliente = v.cod_cliente 
+    and p.cod_produto = v.cod_produto
+    and e.cod_produto = p.cod_produto
+    and ci.uf in ('CE', 'PE', 'AL', 'RN') 
+    and e.qtde between 0 and 5
+    and v.qtde > 5 
+    and v.data_venda between '01-jan-24' and '31-jan-24'
+order by v.data_venda desc, c.razao_social asc;
+
+/* 
+6) O usuário POS precisa acessar todas essas views exatamente com o nome abaixo. São elas:
+
+VCLITEL
+VPRODINAT
+VFAT_AL_BIM1_2004 
+VFAT_NE_JAN2024
+
+Para isso, crie sinônimos no usuários POS para acesso às referidas views. 
+Lembre-se que para isso o usuário POS precisa ter privilégio de acesso às tabelas e às views. 
+*/
+
+grant select on VCLITEL to pos;
+grant select on VPRODINAT to pos;
+grant select on VFAT_AL_BIM1_2004 to pos; 
+grant select on VFAT_NE_JAN2024 to pos;
+
+conn pos/pos
+create synonym VCLITEL for eor.VCLITEL
+create synonym VPRODINAT for eor.VPRODINAT
+create synonym VFAT_AL_BIM1_2004 for eor.VFAT_AL_BIM1_2004
+create synonym VFAT_NE_JAN2024 for eor.VFAT_NE_JAN2024
