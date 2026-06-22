@@ -40,3 +40,6 @@ Ub11Exer/
 *.vbox*
 *.vdi
 *.vmdk
+
+# outros repos que contemplem o curso
+3semestre/poo/faria-lima-simulator/
