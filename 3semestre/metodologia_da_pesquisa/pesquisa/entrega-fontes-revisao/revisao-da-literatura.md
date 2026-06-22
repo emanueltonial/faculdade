@@ -4,6 +4,8 @@
 
 O presente trabalho tem como tema central a infraestrutura de pipelines e orquestração em Engenharia de Dados, com ênfase no impacto do uso de containers na eficiência, escalabilidade e confiabilidade dos processos de tratamento e movimentação de dados em ambientes modernos de grande escala.
 
+---
+
 ## 2. Perguntas de pesquisa identificadas
 
 A partir do tema central, foram formuladas três perguntas de pesquisa, listadas a seguir:
@@ -14,9 +16,13 @@ A partir do tema central, foram formuladas três perguntas de pesquisa, listadas
 
 Após avaliação das três perguntas quanto à especificidade, mensurabilidade e disponibilidade de literatura acadêmica, a Pergunta 1 foi selecionada como foco principal do trabalho, por apresentar maior precisão técnica e maior volume de estudos disponíveis no Consensus.
 
+---
+
 ## 3. Pergunta de pesquisa selecionada
 
 > O uso de containers afeta a eficiência das pipelines de dados em ambientes de engenharia de dados de grande escala?
+
+---
 
 ## 4. Consenso acadêmico
 
@@ -28,6 +34,8 @@ Entre os achados mais relevantes identificados pelo Consensus, destacam-se:
 - Pipelines IoT containerizadas em Kubernetes com autoscaling alcançaram aumento de throughput entre 1,31x e 2,4x, com redução de latência entre 32x e 80x frente a alocações estáticas de recursos (AURANGZAIB et al., 2022).
 - Um modelo de pipeline encapsulado em containers reduziu tempos de resposta entre 43% e 91% em comparação a pipelines em memória e outras engines (SANTIAGO DURAN et al., 2020).
 - Em ambientes de ETL na área da saúde, a combinação de PySpark e Docker trouxe ganhos relevantes de tempo de processamento, uso de recursos e escalabilidade (SOLTANMOHAMMADI; HIKMET, 2024).
+
+---
 
 ## 5. Considerações mais importantes a pesquisar
 
@@ -42,6 +50,8 @@ Com base no consenso acadêmico e nas lacunas identificadas na literatura, as se
 | Contexto setorial | Variações de resultado entre setores: saúde, IoT, machine learning e analytics corporativo |
 | Ferramentas de orquestração | Comparação entre Apache Airflow, Prefect e Dagster em ambientes containerizados |
 
+---
+
 ## 6. Justificativa
 
 A crescente adoção de arquiteturas orientadas a dados nas organizações torna a eficiência das pipelines de dados um fator crítico de competitividade e inovação. Nesse contexto, a containerização emerge como uma das principais estratégias de infraestrutura em engenharia de dados, impactando diretamente a velocidade de processamento, a confiabilidade operacional e a capacidade de escalonamento dos sistemas.
@@ -52,6 +62,8 @@ Além da performance bruta, containers oferecem benefícios operacionais relevan
 
 Compreender como e sob quais condições esses ganhos se materializam é, portanto, essencial para orientar decisões estratégicas de infraestrutura em times de engenharia de dados modernos, especialmente diante da expansão acelerada de volumes de dados e da diversificação das fontes e destinos de informação nas organizações contemporâneas.
 
+---
+
 ## 7. Estratégia de mapeamento das fontes
 
 Para a seleção das fontes utilizei a técnica de snowballing, com apoio de ferramentas de mapeamento de citações, o Litmaps. Parti de artigos origem de alta relevância e impacto e, a partir deles, explorei o grafo de citações em dois sentidos:
@@ -61,6 +73,8 @@ Para a seleção das fontes utilizei a técnica de snowballing, com apoio de fer
 
 Os critérios de seleção foram: aderência direta à pergunta de pesquisa, impacto medido pelo número de citações para os clássicos, atualidade para os trabalhos recentes, e disponibilidade de texto completo. Ao final foram selecionadas 11 fontes, sendo 5 clássicas e 6 recentes, acima do mínimo de 10 fontes, com pelo menos 3 de cada tipo, pedido na atividade.
 
+---
+
 ## 8. Artigos origem
 
 | Artigo origem | Tipo | Por que é seed |
@@ -69,9 +83,13 @@ Os critérios de seleção foram: aderência direta à pergunta de pesquisa, imp
 | Felter et al. (2015) | Clássico | Comparação canônica entre VM e container, com cerca de 1.180 citações. Fundamenta a premissa de overhead desprezível dos containers. |
 | Pahl et al. (2019) | Clássico, revisão | Revisão de estado da arte sobre tecnologias de containers na nuvem. Bom hub de citações para expandir o mapa em direção a orquestração e ETL. |
 
+---
+
 ## 9. Fontes selecionadas
 
 Foram selecionadas 10 fontes no total, sendo 6 clássicas e 4 recentes, atendendo ao mínimo de 10 fontes com ao menos 3 de cada tipo exigido pela atividade.
+
+---
 
 ### 9.1 Clássicos e mais citados
 
@@ -84,6 +102,8 @@ Foram selecionadas 10 fontes no total, sendo 6 clássicas e 4 recentes, atendend
 | Zhang et al. | 2018 | IEEE CLOUD | Comparação empírica entre containers e VMs em workloads Spark de big data. Containers apresentam melhor escalabilidade e utilização de CPU e memória. |
 | Pahl et al. | 2019 | IEEE TCC | Revisão sistemática das tecnologias de containers na nuvem. Consolida trade offs de performance e isolamento. Artigo origem do mapeamento. |
 
+---
+
 ### 9.2 Recentes, 2020 a 2025
 
 | Referência | Ano | Veículo | Relevância para a pergunta |
@@ -93,7 +113,15 @@ Foram selecionadas 10 fontes no total, sendo 6 clássicas e 4 recentes, atendend
 | Aqasizade et al. | 2024 | arXiv | Avalia empiricamente o overhead de containers rodando sobre máquinas virtuais em nuvem. Docker e Podman apresentam impacto negligível na maioria dos cenários. |
 | Soltanmohammadi; Hikmet | 2024 | J. Data Anal. Inf. Proc. | ETL em saúde com PySpark e Docker sobre a base MIMIC III. Reporta ganhos de tempo de processamento, uso de recursos e escalabilidade. |
 
-## 10. Referências
+---
+
+### 10. Comparação dos dados
+
+Nessa seção, vai ser realizada a comparação e análise finais dos artigos selecionados. Para realizar esta análise, a ferramenta utilizada foi o NotebookLM.
+
+---
+
+## 11. Referências
 
 AQASIZADE, H.; ATAIE, E.; BASTAM, M. Experimental assessment of containers running on top of virtual machines. arXiv, 2024. arXiv:2401.07539. Disponível em: https://arxiv.org/abs/2401.07539. Acesso em: 22 jun. 2026.
 
