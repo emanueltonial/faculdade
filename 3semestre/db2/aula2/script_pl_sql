@@ -1,0 +1,17 @@
+DECLARE
+    v_biggest_number number;
+    v_ename varchar(10);
+    v_job varchar(9);
+ BEGIN
+    select max(empno)
+    into v_biggest_number
+    from emp;
+    dbms_output.put_line('Maior numero de funcionario: ' || to_char(v_biggest_number));
+    
+    select ename, job
+    into v_ename, v_job
+    from emp
+    where empno = v_biggest_number;
+    dbms_output.put_line('Nome e cargo:' || to_char(v_ename) || ' | ' || to_char(v_job));
+END;    
+/

@@ -15,4 +15,36 @@ Aqui você encontrará materiais que ajudam no meu aprendizado e crescimento na 
 
 ---
 
+## 📊 Progresso por Linguagem
+
+| Linguagem | Arquivos |
+|---|---:|
+| ☕ Java | 181 |
+| ⚙️ C++ | 50 |
+| 🌐 HTML | 99 |
+| 🎨 CSS | 88 |
+| 🟨 JavaScript | 38 |
+| 🗄️ SQL | 11 |
+| 🐘 PHP | 2 |
+| 📝 Markdown | 23 |
+
+---
+
+## ✅ Esteira CI/CD Ativa
+
+| Workflow | Responsabilidade |
+|---|---|
+| 🛡️ quality-gate | Bloqueia VMs e arquivos grandes |
+| ☕ build-java | Compila Java por pasta/pacote |
+| 🌐 lint-web | Valida HTML, CSS e JS |
+| 📝 update-readme | Atualiza este README automaticamente |
+
+---
+
+> 🤖 Atualizado automaticamente em: 2026-06-22 04:08 UTC  
+> 📌 Branch: `branch/3-semestre`  
+> 🔖 Commit: `dc96205740bb112c0c79ac91164b9020df13d1d3`
+
+---
+
 Fique à vontade para explorar o conteúdo!

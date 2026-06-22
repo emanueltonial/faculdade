@@ -1,0 +1,76 @@
+3.B
+declare 
+    v_deptno emp.deptno%type;
+      v_dname dept.dname%type;
+      v_loc dept.loc%type;
+ 
+begin 
+
+select max (hiredate)
+into v_max_hiredate
+from emp;
+
+select deptno
+into v_deptno
+from emp
+where hirdate = v_max_hiredate;
+
+select dname, loc
+into v_dname, v_loc
+from dept 
+where deptno = v_deptno;
+
+dbms_output.putline('Nome do departamento:' ||v_dname||' Cidade:'||v_loc);
+
+end;
+/
+
+#######################################################################
+
+3.C
+declare 
+    v_ename emp.ename%type;
+    v_job emp.job%type;
+    v_sal emp.sal%type;
+    v_deptno dept.deptno%type;
+    v_loc dept.loc%type;
+
+begin
+   select ename, job, sal, deptno
+   into v_ename, v_job, v_sal, v_deptno
+   from emp
+   where sal between 4000 and 6000;
+   
+   select loc 
+   into v_loc
+   from dept
+   where deptno = v_deptno;
+   
+    dbms_output.put_line('Nome:'||v_ename||' Cidade:'||v_loc);
+   
+ end;
+ /
+
+ # Com JOIN
+ 
+declare 
+    v_ename emp.ename%type;
+    v_job emp.job%type;
+    v_sal emp.sal%type;
+    v_deptno dept.deptno%type;
+    v_loc dept.loc%type;
+
+begin
+   select emp.ename, emp.job, emp.sal, dept.deptno, dept.loc
+   into v_ename, v_job, v_sal, v_deptno, v_loc
+   from emp, dept
+   where 
+   emp.deptno = dept.deptno
+   and sal between 4000 and 6000;
+     
+    dbms_output.put_line('Nome:'||v_ename||' Cidade:'||v_loc);
+   
+ end;
+ /
+
+ #############################################
