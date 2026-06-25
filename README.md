@@ -35,15 +35,14 @@ Aqui você encontrará materiais que ajudam no meu aprendizado e crescimento na 
 | Workflow | Responsabilidade |
 |---|---|
 | 🛡️ quality-gate | Bloqueia VMs e arquivos grandes |
-| ☕ build-java | Compila Java por pasta/pacote |
 | 🌐 lint-web | Valida HTML, CSS e JS |
 | 📝 update-readme | Atualiza este README automaticamente |
 
 ---
 
-> 🤖 Atualizado automaticamente em: 2026-06-25 01:46 UTC  
+> 🤖 Atualizado automaticamente em: 2026-06-25 01:47 UTC  
 > 📌 Branch: `main`  
-> 🔖 Commit: `fafbe7b464f613b06ca8982e741e624b0673a0b1`
+> 🔖 Commit: `e0eabbfcc8f8cc6f423decec6b8d64e864f0efb7`
 
 ---
 
