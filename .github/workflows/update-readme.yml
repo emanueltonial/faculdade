@@ -109,7 +109,6 @@ jobs:
           | Workflow | Responsabilidade |
           |---|---|
           | 🛡️ quality-gate | Bloqueia VMs e arquivos grandes |
-          | ☕ build-java | Compila Java por pasta/pacote |
           | 🌐 lint-web | Valida HTML, CSS e JS |
           | 📝 update-readme | Atualiza este README automaticamente |
 
