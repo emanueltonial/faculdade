@@ -10,7 +10,7 @@ group by trunc(dt_emis, 'MM');
 create index tnfs_saida_hist_ix1
 on tnfs_saida_hist (dt_emis, uf, sit_nf, peso_liq);
 
-/* SELECTs*/
+/* SELECTs */
 
 select uf, count(*)
 from tnfs_saida_hist

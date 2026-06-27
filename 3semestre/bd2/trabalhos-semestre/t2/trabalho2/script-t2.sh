@@ -16,7 +16,7 @@ grant create materialized view to filialb;
 -- criacao dos snapshots
 conn prod/prod
 
--- criar as view com user prod
+-- criar as views com user prod
 create materialized view log on pedido;
 create materialized view log on item_pedido;
 
@@ -33,13 +33,13 @@ create snapshot pedido
         where filial = 1;
 
 create snapshot item_pedido
-    refresh fast
+    refresh complete
     as select * from item_pedido@dl_prod
         where cod_ped in (
             select cod_ped from pedido@dl_prod where filial = 1
         );
 
--- filial b
+-- filialb
 conn filialb/filialb
 
 create database link dl_prod
@@ -52,7 +52,7 @@ create snapshot pedido
         where filial = 2;
 
 create snapshot item_pedido
-    refresh fast
+    refresh complete
     as select * from item_pedido@dl_prod
         where cod_ped in (
             select cod_ped from pedido@dl_prod where filial = 2
