@@ -26,7 +26,7 @@ Aqui você encontrará materiais que ajudam no meu aprendizado e crescimento na 
 | 🟨 JavaScript | 38 |
 | 🗄️ SQL | 11 |
 | 🐘 PHP | 2 |
-| 📝 Markdown | 27 |
+| 📝 Markdown | 29 |
 
 ---
 
@@ -40,9 +40,9 @@ Aqui você encontrará materiais que ajudam no meu aprendizado e crescimento na 
 
 ---
 
-> 🤖 Atualizado automaticamente em: 2026-07-31 14:40 UTC  
+> 🤖 Atualizado automaticamente em: 2026-08-03 23:36 UTC  
 > 📌 Branch: `main`  
-> 🔖 Commit: `1310c822a263f1b99ed281dc96ec4d92b4649bd1`
+> 🔖 Commit: `6fa8cb6ed16d40f460f689d6db63ffb8395f79b6`
 
 ---
 
