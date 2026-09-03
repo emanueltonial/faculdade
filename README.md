@@ -19,11 +19,11 @@ Aqui você encontrará materiais que ajudam no meu aprendizado e crescimento na 
 
 | Linguagem | Arquivos |
 |---|---:|
-| ☕ Java | 196 |
+| ☕ Java | 200 |
 | ⚙️ C++ | 50 |
-| 🌐 HTML | 102 |
-| 🎨 CSS | 92 |
-| 🟨 JavaScript | 42 |
+| 🌐 HTML | 104 |
+| 🎨 CSS | 94 |
+| 🟨 JavaScript | 46 |
 | 🗄️ SQL | 12 |
 | 🐘 PHP | 2 |
 | 📝 Markdown | 34 |
@@ -40,9 +40,9 @@ Aqui você encontrará materiais que ajudam no meu aprendizado e crescimento na 
 
 ---
 
-> 🤖 Atualizado automaticamente em: 2026-08-28 01:32 UTC  
+> 🤖 Atualizado automaticamente em: 2026-09-03 22:33 UTC  
 > 📌 Branch: `main`  
-> 🔖 Commit: `0cc900649daf7fe61d812256d7f41d9c6082501a`
+> 🔖 Commit: `630348aee04f13c1d592bdf11f99b180607ee712`
 
 ---
 
