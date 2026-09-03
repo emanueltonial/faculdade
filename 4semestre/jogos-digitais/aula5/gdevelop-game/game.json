@@ -111,6 +111,14 @@
         "name": "coinGold.png",
         "smoothed": true,
         "userAdded": false
+      },
+      {
+        "file": "slimeWalk1.png",
+        "kind": "image",
+        "metadata": "",
+        "name": "slimeWalk1.png",
+        "smoothed": true,
+        "userAdded": false
       }
     ]
   },
@@ -119,13 +127,19 @@
     "folderName": "__ROOT"
   },
   "objectsGroups": [],
-  "variables": [],
+  "variables": [
+    {
+      "name": "Pontos",
+      "type": "number",
+      "value": 0
+    }
+  ],
   "layouts": [
     {
       "b": 214,
       "disableInputWhenNotFocused": true,
-      "mangledName": "Cena_32sem_32t_237tulo",
-      "name": "Cena sem título",
+      "mangledName": "Jogo_32Extraterrestre",
+      "name": "Jogo Extraterrestre",
       "r": 206,
       "standardSortMethod": true,
       "stopSoundsOnStartup": true,
@@ -268,9 +282,9 @@
           "layer": "",
           "name": "Fundo",
           "persistentUuid": "ac13f21c-3182-421b-bc2d-8f5ba50b83df",
-          "width": 1278,
-          "x": 4,
-          "y": -1,
+          "width": 1280,
+          "x": -1,
+          "y": -3,
           "zOrder": 0,
           "numberProperties": [],
           "stringProperties": [],
@@ -356,6 +370,57 @@
           "x": 30,
           "y": 20,
           "zOrder": 0,
+          "numberProperties": [],
+          "stringProperties": [],
+          "initialVariables": []
+        },
+        {
+          "angle": 0,
+          "customSize": true,
+          "depth": 1,
+          "height": 49,
+          "keepRatio": true,
+          "layer": "",
+          "name": "Inimigo",
+          "persistentUuid": "a436d17a-932b-49f1-8aac-f5fd3a99dc6b",
+          "width": 52,
+          "x": 651,
+          "y": 473,
+          "zOrder": 5,
+          "numberProperties": [],
+          "stringProperties": [],
+          "initialVariables": []
+        },
+        {
+          "angle": 0,
+          "customSize": true,
+          "depth": 1,
+          "height": 49,
+          "keepRatio": true,
+          "layer": "",
+          "name": "Inimigo",
+          "persistentUuid": "07386447-a037-4b90-889d-7b43bffc7ef2",
+          "width": 59,
+          "x": 885,
+          "y": 408,
+          "zOrder": 5,
+          "numberProperties": [],
+          "stringProperties": [],
+          "initialVariables": []
+        },
+        {
+          "angle": 0,
+          "customSize": true,
+          "depth": 1,
+          "height": 49,
+          "keepRatio": true,
+          "layer": "",
+          "name": "Inimigo",
+          "persistentUuid": "f2f9f091-8e5d-4c7b-b38f-f3af49dbbb9f",
+          "width": 59,
+          "x": 422,
+          "y": 531,
+          "zOrder": 5,
           "numberProperties": [],
           "stringProperties": [],
           "initialVariables": []
@@ -630,6 +695,67 @@
             "lineHeight": 0,
             "color": "0;0;0"
           }
+        },
+        {
+          "adaptCollisionMaskAutomatically": true,
+          "assetStoreId": "",
+          "name": "Inimigo",
+          "persistentUuid": "0706462e-f316-4f4b-92b3-c3248e1fbf2d",
+          "type": "Sprite",
+          "updateIfNotVisible": false,
+          "variables": [],
+          "effects": [],
+          "behaviors": [],
+          "animations": [
+            {
+              "name": "",
+              "useMultipleDirections": false,
+              "directions": [
+                {
+                  "looping": false,
+                  "timeBetweenFrames": 0.08,
+                  "sprites": [
+                    {
+                      "hasCustomCollisionMask": true,
+                      "image": "slimeWalk1.png",
+                      "points": [],
+                      "originPoint": {
+                        "name": "origine",
+                        "x": 0,
+                        "y": 0
+                      },
+                      "centerPoint": {
+                        "automatic": true,
+                        "name": "centre",
+                        "x": 0,
+                        "y": 0
+                      },
+                      "customCollisionMask": [
+                        [
+                          {
+                            "x": 0,
+                            "y": 0
+                          },
+                          {
+                            "x": 50,
+                            "y": 0
+                          },
+                          {
+                            "x": 50,
+                            "y": 28
+                          },
+                          {
+                            "x": 0,
+                            "y": 28
+                          }
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         }
       ],
       "objectsFolderStructure": {
@@ -649,6 +775,9 @@
           },
           {
             "objectName": "ContadorMoedas"
+          },
+          {
+            "objectName": "Inimigo"
           }
         ]
       },
@@ -708,7 +837,7 @@
                 "ContadorMoedas",
                 "Text",
                 "=",
-                "\"Moedas: 0\""
+                "\"Pontos: 0\""
               ]
             }
           ]
@@ -755,7 +884,7 @@
                 "ContadorMoedas",
                 "Text",
                 "=",
-                "\"Moedas: \" + ToString(MoedasColetadas)"
+                "\"Pontos: \" + ToString(MoedasColetadas)"
               ]
             },
             {
@@ -765,6 +894,88 @@
               "parameters": [
                 "Moeda",
                 ""
+              ]
+            }
+          ]
+        },
+        {
+          "type": "BuiltinCommonInstructions::Standard",
+          "conditions": [
+            {
+              "type": {
+                "value": "CollisionNP"
+              },
+              "parameters": [
+                "Jogador",
+                "Inimigo",
+                "",
+                "",
+                ""
+              ]
+            }
+          ],
+          "actions": [
+            {
+              "type": {
+                "value": "AddForceXY"
+              },
+              "parameters": [
+                "Jogador",
+                "-360",
+                "0",
+                ""
+              ]
+            }
+          ]
+        },
+        {
+          "type": "BuiltinCommonInstructions::Standard",
+          "conditions": [
+            {
+              "type": {
+                "value": "KeyFromTextPressed"
+              },
+              "parameters": [
+                "",
+                "\"Right\""
+              ]
+            }
+          ],
+          "actions": [
+            {
+              "type": {
+                "value": "FlippableCapability::FlippableBehavior::FlipX"
+              },
+              "parameters": [
+                "Jogador",
+                "Flippable",
+                ""
+              ]
+            }
+          ]
+        },
+        {
+          "type": "BuiltinCommonInstructions::Standard",
+          "conditions": [
+            {
+              "type": {
+                "value": "KeyFromTextPressed"
+              },
+              "parameters": [
+                "",
+                "\"Right\""
+              ]
+            }
+          ],
+          "actions": [
+            {
+              "type": {
+                "value": "FlippableCapability::FlippableBehavior::FlipX"
+              },
+              "parameters": [
+                "Jogador",
+                "Flippable",
+                "yes"
               ]
             }
           ]
@@ -887,6 +1098,10 @@
         {
           "name": "Scale",
           "type": "ScalableCapability::ScalableBehavior"
+        },
+        {
+          "name": "Text",
+          "type": "TextContainerCapability::TextContainerBehavior"
         }
       ]
     }
