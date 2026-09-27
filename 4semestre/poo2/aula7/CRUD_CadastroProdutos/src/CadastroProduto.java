@@ -8,92 +8,148 @@ public class CadastroProduto extends javax.swing.JInternalFrame implements Actio
 {
     
     String[] categorias = {"Informatica", "Eletronicos", "Moveis", "Material de Escritorio", "Eletrodomesticos"};
-    DefaultComboBoxModel<String> mcategoria = new DefaultComboBoxModel<>();
-
+    DefaultComboBoxModel mcategoria = new DefaultComboBoxModel();
+    
     String[] marcas = {"Samsung", "Dell", "Lenovo", "LG", "HP"};
-    DefaultComboBoxModel<String> mmarca = new DefaultComboBoxModel<>();
-
+    DefaultComboBoxModel mmarca = new DefaultComboBoxModel();
+    
     String tipo = "Revenda";
+    
     String situacao = "Ativo";
 
-    public CadastroProduto() {
+    public CadastroProduto() 
+    {
         initComponents();
-
+        
         btnNovo.addActionListener(this);
         btnSalvar.addActionListener(this);
         btnConsultar.addActionListener(this);
         btnAlterar.addActionListener(this);
         btnExcluir.addActionListener(this);
-
-        rbtRevenda.addActionListener(this);
-        rbtFabricacaoPropria.addActionListener(this);
-        cbSituacao.addActionListener(this);
-
-        for (String cat : categorias) {
+        
+        for (String cat : categorias)
             mcategoria.addElement(cat);
-        }
         cbxCategoria.setModel(mcategoria);
-
-        for (String m : marcas) {
+        
+        for (String m : marcas)
             mmarca.addElement(m);
-        }
-        cbxMarca.setModel(mmarca);   // antes estava cbxCategoria
-
-        if (!BD.getConnection()) {
+        cbxCategoria.setModel(mmarca);
+        
+        if (!BD.getConnection())
+        {
             JOptionPane.showMessageDialog(null, "Falha na Conexao");
-            dispose();   // em vez de System.exit(0)
-            return;
+            System.exit(0);
         }
-
-        BD.setResultSet("SELECT * FROM produtos");
+        
+        BD.setResultSet("SELECT * FROM produto");
     }
     
     @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == btnNovo) {
+    public void actionPerformed(ActionEvent e) 
+    {
+        if (e.getSource() == btnNovo)
+        {
+            setBotoes(false, true, false, false, false, true);
+            
             limpaCampos();
-        } else if (e.getSource() == btnSalvar) {
-            String precoCusto = tfdPrecoCusto.getText().replace(",", ".");
-            String precoVenda = tfdPrecoVenda.getText().replace(",", ".");
-
-            String sql = "INSERT INTO produtos (id, descricao, categoria, marca, preco_custo, preco_venda, "
-                    + "fornecedor, tipo, quantidade_estoque, estoque_minimo, situacao) "
+            return;
+        }
+        
+        else if (e.getSource() == btnSalvar)
+        {
+            String sql = "";
+            sql = "INSERT INTO produto (id, descricao, categoria, marca, preco_custo, preco_venda, "
+                                      + "fornecedor, tipo, quantidade_estoque, estoque_minimo, situacao) "
                     + "VALUES ("
                     + "'" + tfdCodigo.getText() + "',"
                     + "'" + tfdDescricao.getText() + "',"
                     + "'" + categorias[cbxCategoria.getSelectedIndex()] + "',"
                     + "'" + marcas[cbxMarca.getSelectedIndex()] + "',"
-                    + precoCusto + ","
-                    + precoVenda + ","
+                    + tfdPrecoCusto.getText() + ","
+                    + tfdPrecoVenda.getText() + ","
                     + "'" + tfdFornecedor.getText() + "',"
                     + "'" + tipo + "',"
                     + tfdQuantidadeEstoque.getText() + ","
                     + tfdEstoqueMinimo.getText() + ","
                     + "'" + situacao + "'"
-                    + ")";
-
+                    + ");";
+            
+            
             int r = BD.runSQL(sql);
-
-            if (r == 1) {
+            
+            if (r == 1)
                 JOptionPane.showMessageDialog(null, "Inclusao realizada com sucesso");
-            } else {
-                JOptionPane.showMessageDialog(null, "Falha na inclusao");
-            }
-        } else if (e.getSource() == btnConsultar) {
-
-        } else if (e.getSource() == btnAlterar) {
-
-        } else if (e.getSource() == btnExcluir) {
-
-        } // radio buttons
-        else if (e.getSource() == rbtRevenda) {
-            tipo = "Revenda";
-        } else if (e.getSource() == rbtFabricacaoPropria) {
-            tipo = "Fabricacao Propria";
-        } // checkbox
-        else if (e.getSource() == cbSituacao) {
-            situacao = cbSituacao.isSelected() ? "Ativo" : "Inativo";
+            else
+                JOptionPane.showMessageDialog(null, "Erro ao realizar a inclusão");
         }
+        
+        else if (e.getSource() == btnConsultar)
+        {
+            try 
+            {
+                String sql = "SELECT * FROM produto WHERE id='"+ tfdCodigo.getText() + "'";
+
+                BD.setResultSet(sql);
+                if (BD.resultSet.next())
+                {
+                    atualizaCampos();
+                    tfdDescricao.requestFocus();
+                    setBotoes(true, false, true, true, true, false);
+                }
+                else 
+                {
+                    JOptionPane.showMessageDialog(null,"Produto não encontrado!");
+                    tfdCodigo.requestFocus();
+                    BD.setResultSet("SELECT * FROM produto");
+                }
+            }
+            catch (Exception erro) 
+            {
+
+            } 
+        }
+        
+        else if (e.getSource() == btnAlterar)
+        {
+            String sql = "";
+
+            sql = "UPDATE produto SET "+
+            "id="+ tfdCodigo.getText()+","+
+            "descricao='"+ tfdDescricao.getText()+"',"+
+            "preco_custo='"+tfdPrecoCusto.getText()+"'"+
+            " WHERE id = "+ tfdCodigo.getText();
+            // adicionar os outros campos
+            
+            System.out.println(sql);
+            
+            int r = BD.runSQL(sql);
+            if (r==1)
+            {
+                JOptionPane.showMessageDialog(null,"Alteração realizada com sucesso!");
+                setBotoes(true,true, false, true, true, false);
+            }
+            else 
+            {
+                JOptionPane.showMessageDialog(null,"Problemas na Alteração, verifique se você digitou os campos corretamente!");
+            }
+            BD.setResultSet("SELECT * FROM funcionario");
+        }
+        
+        else if (e.getSource() == btnExcluir)
+        {
+            
+        }
+        
+        // radio buttons
+        else if (e.getSource() == rbtRevenda)
+            tipo = "Revenda";
+        
+        else if (e.getSource()  == rbtFabricacaoPropria)
+            tipo = "Fabricacao Propria";
+        
+        // checkbox
+        else if (e.getSource() == cbSituacao)
+        {}
     }
     
     public void limpaCampos()
@@ -106,9 +162,58 @@ public class CadastroProduto extends javax.swing.JInternalFrame implements Actio
         tfdQuantidadeEstoque.setText("");
         tfdEstoqueMinimo.setText("");
         
-        
         tfdCodigo.requestFocus();
     }
+    
+    public void setBotoes(boolean bNovo, boolean bLocalizar, boolean bGravar ,boolean bAlterar, boolean bExcluir, boolean bCancelar )
+    {
+        btnNovo.setEnabled(bNovo);
+        btnConsultar.setEnabled(bLocalizar);
+        btnSalvar.setEnabled(bGravar);
+        btnAlterar.setEnabled(bAlterar);
+        btnExcluir.setEnabled(bExcluir);
+        // btnCancelar.setEnabled(bCancelar);
+    }
+    
+    public void atualizaCampos(){
+        try 
+        {
+            if (BD.resultSet.isAfterLast())
+                BD.resultSet.last();
+            if (BD.resultSet.isBeforeFirst())
+                BD.resultSet.first();
+            
+            tfdCodigo.setText( String.valueOf(BD.resultSet.getInt("id")) ); 
+            tfdDescricao.setText(BD.resultSet.getString("descricao"));
+            cbxCategoria.setSelectedItem(BD.resultSet.getString("categoria"));
+            cbxMarca.setSelectedItem(BD.resultSet.getString("marca"));
+            tfdPrecoCusto.setText( String.valueOf(BD.resultSet.getDouble("preco_custo")) ); 
+            tfdPrecoVenda.setText( String.valueOf(BD.resultSet.getDouble("preco_venda")) ); 
+            tfdFornecedor.setText( BD.resultSet.getString("fornecedor") );
+            
+            tipo = BD.resultSet.getString("tipo");
+            if (tipo.equals("Revenda"))
+                rbtRevenda.setSelected(true);
+            else
+                rbtFabricacaoPropria.setSelected(true);
+            
+            tfdQuantidadeEstoque.setText( String.valueOf(BD.resultSet.getInt("quantidade_estoque")) );
+            tfdEstoqueMinimo.setText( String.valueOf(BD.resultSet.getInt("estoque_minimo")) );
+            
+            situacao = BD.resultSet.getString("situacao");
+            if (situacao.equals("Ativo"))
+                cbSituacao.setSelected(true);
+            else
+                cbSituacao.setSelected(false);
+            
+
+        } 
+        catch (Exception erro)
+        {
+
+        }
+    }
+ 
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -450,14 +555,34 @@ public class CadastroProduto extends javax.swing.JInternalFrame implements Actio
     }// </editor-fold>//GEN-END:initComponents
 
     private void cbSituacaoStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_cbSituacaoStateChanged
-        if (cbSituacao.isSelected()) {
-             situacao = "Inativo";
-        } else {
-              situacao = "Ativo";
-            }
-            
+        if (cbSituacao.isSelected()) 
+            situacao = "Ativo";
+        else 
+            situacao = "Inativo";
+    
     }//GEN-LAST:event_cbSituacaoStateChanged
 
+    private void tfdCodigoActionPerformed(java.awt.event.ActionEvent evt) {
+        
+    }
+
+    private void tfdPrecoVendaActionPerformed(java.awt.event.ActionEvent evt) {
+        
+    }
+
+    private void rbtRevendaActionPerformed(java.awt.event.ActionEvent evt) {
+        
+    }
+
+    private void rbtFabricacaoPropriaActionPerformed(java.awt.event.ActionEvent evt) {
+       
+    }
+
+    private void cbSituacaoActionPerformed(java.awt.event.ActionEvent evt) {
+        
+    }
+    
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup btgTipo;
@@ -499,24 +624,5 @@ public class CadastroProduto extends javax.swing.JInternalFrame implements Actio
     private javax.swing.JTextField tfdQuantidadeEstoque;
     // End of variables declaration//GEN-END:variables
 
-    private void tfdPrecoVendaActionPerformed(ActionEvent e) {
-    
-    }
-
-    private void rbtRevendaActionPerformed(ActionEvent e) {
-    
-    }
-
-    private void rbtFabricacaoPropriaActionPerformed(ActionEvent e) {
-    
-    }
-
-    private void tfdCodigoActionPerformed(ActionEvent e) {
-    
-    }
-
-    private void cbSituacaoActionPerformed(ActionEvent e) {
-    
-    }
     
 }

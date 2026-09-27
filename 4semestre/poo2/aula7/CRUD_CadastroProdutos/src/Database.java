@@ -9,7 +9,7 @@ import javax.swing.JOptionPane;
 public class Database 
 {
     final static int PORTA = 3306;
-    final static String NOME_DB = "empresa";
+    final static String NOME_DB = "empresa_oop2";
     
     public void geraBD()
     {
@@ -57,7 +57,7 @@ public class Database
             String sql = "CREATE TABLE IF NOT EXISTS produto"
                        + "(id int primary key,"
                        + "descricao varchar(50),"
-                       + "categoria varchar(30)),"
+                       + "categoria varchar(30),"
                        + "marca varchar(30),"
                        + "preco_custo double,"
                        + "preco_venda double,"
@@ -93,10 +93,19 @@ public class Database
         try 
         {
             Class.forName(DRIVER);
-            Connection conn = DriverManager.getConnection(URL, "aluno", "");
+            Connection conn = DriverManager.getConnection(URL, "root", "123");
             
-            // consulta aq
-            
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery("SELECT id, nome FROM funcionario");
+            while (rs.next()) {
+            int codigo = rs.getInt("id");
+            String nom = rs.getString("nome");
+            System.out.println(codigo + " "+ nom);
+            }
+            JOptionPane.showMessageDialog(null,"Consulta realizada com sucesso");
+            rs.close();
+            st.close();
+            conn.close();
             conn.close();
         }
         catch (ClassNotFoundException ex) 
