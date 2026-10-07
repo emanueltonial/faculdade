@@ -82,7 +82,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 648, Short.MAX_VALUE)
+            .addGap(0, 1014, Short.MAX_VALUE)
         );
 
         pack();
