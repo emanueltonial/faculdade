@@ -40,9 +40,9 @@ Aqui você encontrará materiais que ajudam no meu aprendizado e crescimento na 
 
 ---
 
-> 🤖 Atualizado automaticamente em: 2026-11-05 02:53 UTC  
+> 🤖 Atualizado automaticamente em: 2026-11-06 13:41 UTC  
 > 📌 Branch: `main`  
-> 🔖 Commit: `252b2fb494184d5d1d8711c45484d2b1c2ba3821`
+> 🔖 Commit: `ee225d1302a519289c9c7fa70ad81880e775fa27`
 
 ---
 
