@@ -17,7 +17,7 @@ public class CadastroProduto extends javax.swing.JInternalFrame implements Actio
     
     String tipo = "Revenda";
     
-    String situacao = "Ativo";
+    String situacao = "Ativo";Ativo
 
     public CadastroProduto() 
     {
@@ -625,7 +625,7 @@ public void buscarProduto() {
     }
 
     private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
-        // TODO add your handling code here:
+        buscarProduto();
     }//GEN-LAST:event_btnPesquisarActionPerformed
 
 
